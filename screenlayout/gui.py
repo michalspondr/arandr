@@ -161,7 +161,7 @@ class Application(object):
             self.filetemplate = self.widget.load_from_file(file)
             if apply:
                 self.do_apply()
-                gtk.main_quit()
+                self.window.destroy()
 
         self.widget.connect('changed', self._widget_changed)
         self._widget_changed(self.widget)
