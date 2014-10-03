@@ -1,16 +1,16 @@
 # ARandR -- Another XRandR GUI
 # Copyright (C) 2008 -- 2011 chrysn <chrysn@fsfe.org>
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -107,7 +107,7 @@ class Application(object):
     </ui>
     """
 
-    def __init__(self, file=None, randr_display=None, force_version=False):
+    def __init__(self, file=None, randr_display=None, force_version=False, apply=False):
         self.window = window = gtk.Window()
         window.props.title = "Screen Layout Editor"
 
@@ -159,6 +159,9 @@ class Application(object):
             self.filetemplate = self.widget.load_from_x()
         else:
             self.filetemplate = self.widget.load_from_file(file)
+            if apply:
+                self.do_apply()
+                gtk.main_quit()
 
         self.widget.connect('changed', self._widget_changed)
         self._widget_changed(self.widget)
@@ -303,6 +306,7 @@ def main():
     p = optparse.OptionParser(usage="%prog [savedfile]", description="Another XRandrR GUI", version="%%prog %s"%__version__)
     p.add_option('--randr-display', help='Use D as display for xrandr (but still show the GUI on the display from the environment; e.g. `localhost:10.0`)', metavar='D')
     p.add_option('--force-version', help='Even run with untested XRandR versions', action='store_true')
+    p.add_option('--apply', help='Apply config file immediatly', action='store_true')
 
     (options, args) = p.parse_args()
     if len(args) == 0:
@@ -315,6 +319,7 @@ def main():
     a = Application(
             file=file_to_open,
             randr_display=options.randr_display,
-            force_version=options.force_version
+            force_version=options.force_version,
+            apply=options.apply
             )
     a.run()
