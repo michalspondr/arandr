@@ -38,8 +38,8 @@ class XRandR(object):
             self.environ['DISPLAY'] = display
 
         version_output = self._output("--version")
-        if not ("1.2" in version_output or "1.3" in version_output or "1.4" in version_output) and not force_version:
-            raise Exception("XRandR 1.2/1.3 required.")
+        if not ("1.2" in version_output or "1.3" in version_output or "1.4" or "1.5" in version_output) and not force_version:
+            raise Exception("XRandR 1.2/1.3/1.4/1.5 required.")
 
     def _get_outputs(self):
         assert self.state.outputs.keys() == self.configuration.outputs.keys()
